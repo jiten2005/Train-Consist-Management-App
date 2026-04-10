@@ -1,3 +1,5 @@
+package Test;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,7 @@ class Bogie {
 }
 
 // Main Application
-public class TrainConsistManagementApp {
+public class TrainConsistManagementAppTest {
 
     public static void main(String[] args) {
 
