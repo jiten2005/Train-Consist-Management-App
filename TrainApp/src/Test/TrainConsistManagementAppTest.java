@@ -1,51 +1,65 @@
-import java.util.*;
-import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import java.util.regex.Pattern;
 
 public class TrainConsistManagementAppTest {
 
-    // Bogie class inside main class
-    static class Bogie {
-        String type;
-        int capacity;
+    // Regex patterns
+    String trainRegex = "TRN-\\d{4}";
+    String cargoRegex = "PET-[A-Z]{2}";
 
-        public Bogie(String type, int capacity) {
-            this.type = type;
-            this.capacity = capacity;
-        }
-
-        public int getCapacity() {
-            return capacity;
-        }
-
-        @Override
-        public String toString() {
-            return type + " | Capacity: " + capacity;
-        }
+    // ✅ Valid Train ID
+    @Test
+    void testValidTrainID() {
+        assertTrue(Pattern.matches(trainRegex, "TRN-1234"));
     }
 
-    public static void main(String[] args) {
+    // ❌ Invalid Train ID
+    @Test
+    void testInvalidTrainID() {
+        assertFalse(Pattern.matches(trainRegex, "TRAIN12"));
+        assertFalse(Pattern.matches(trainRegex, "TRN12A"));
+        assertFalse(Pattern.matches(trainRegex, "1234-TRN"));
+    }
 
-        // Create bogie list
-        List<Bogie> bogies = new ArrayList<>();
+    // ❌ Wrong digit length
+    @Test
+    void testTrainIDDigitLength() {
+        assertFalse(Pattern.matches(trainRegex, "TRN-123"));
+        assertFalse(Pattern.matches(trainRegex, "TRN-12345"));
+    }
 
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 40));
-        bogies.add(new Bogie("Sleeper", 80));
-        bogies.add(new Bogie("AC Chair", 65));
+    // ✅ Valid Cargo Code
+    @Test
+    void testValidCargoCode() {
+        assertTrue(Pattern.matches(cargoRegex, "PET-AB"));
+    }
 
-        // UC10: Calculate total seating capacity using map + reduce
-        int totalSeats = bogies.stream()
-                .map(b -> b.getCapacity())      // extract capacity
-                .reduce(0, Integer::sum);       // sum all values
+    // ❌ Invalid Cargo Code
+    @Test
+    void testInvalidCargoCode() {
+        assertFalse(Pattern.matches(cargoRegex, "PET-ab"));
+        assertFalse(Pattern.matches(cargoRegex, "PET123"));
+        assertFalse(Pattern.matches(cargoRegex, "AB-PET"));
+    }
 
-        // Display total seats
-        System.out.println("Total Seating Capacity of Train: " + totalSeats);
+    // ❌ Lowercase not allowed
+    @Test
+    void testCargoUppercaseOnly() {
+        assertFalse(Pattern.matches(cargoRegex, "PET-aB"));
+    }
 
-        // Display original list (unchanged)
-        System.out.println("\nBogie List:");
-        for (Bogie b : bogies) {
-            System.out.println(b);
-        }
+    // ❌ Empty input
+    @Test
+    void testEmptyInput() {
+        assertFalse(Pattern.matches(trainRegex, ""));
+        assertFalse(Pattern.matches(cargoRegex, ""));
+    }
+
+    // ❌ Extra characters
+    @Test
+    void testExactMatchOnly() {
+        assertFalse(Pattern.matches(trainRegex, "TRN-1234X"));
+        assertFalse(Pattern.matches(cargoRegex, "PET-ABC"));
     }
 }
