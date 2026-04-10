@@ -1,32 +1,30 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
-// Bogie class
-class Bogie {
-    String type;
-    int capacity;
-
-    public Bogie(String type, int capacity) {
-        this.type = type;
-        this.capacity = capacity;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public String toString() {
-        return type + " | Capacity: " + capacity;
-    }
-}
-
-// Main Application
 public class TrainConsistManagementApp {
+
+    // Bogie class inside main class
+    static class Bogie {
+        String type;
+        int capacity;
+
+        public Bogie(String type, int capacity) {
+            this.type = type;
+            this.capacity = capacity;
+        }
+
+        public int getCapacity() {
+            return capacity;
+        }
+
+        @Override
+        public String toString() {
+            return type + " | Capacity: " + capacity;
+        }
+    }
 
     public static void main(String[] args) {
 
-        // Create bogie list (reuse from UC7/UC8)
+        // Create bogie list
         List<Bogie> bogies = new ArrayList<>();
 
         bogies.add(new Bogie("Sleeper", 72));
@@ -35,21 +33,16 @@ public class TrainConsistManagementApp {
         bogies.add(new Bogie("Sleeper", 80));
         bogies.add(new Bogie("AC Chair", 65));
 
-        // UC9: Grouping using Stream API
-        Map<String, List<Bogie>> groupedBogies = bogies.stream()
-                .collect(Collectors.groupingBy(b -> b.getType()));
+        // UC10: Calculate total seating capacity using map + reduce
+        int totalSeats = bogies.stream()
+                .map(b -> b.getCapacity())      // extract capacity
+                .reduce(0, Integer::sum);       // sum all values
 
-        // Display grouped bogies
-        System.out.println("Grouped Bogies by Type:");
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            System.out.println("\nType: " + entry.getKey());
-            for (Bogie b : entry.getValue()) {
-                System.out.println(b);
-            }
-        }
+        // Display total seats
+        System.out.println("Total Seating Capacity of Train: " + totalSeats);
 
-        // Show original list (unchanged)
-        System.out.println("\nOriginal Bogie List:");
+        // Display original list (unchanged)
+        System.out.println("\nBogie List:");
         for (Bogie b : bogies) {
             System.out.println(b);
         }
