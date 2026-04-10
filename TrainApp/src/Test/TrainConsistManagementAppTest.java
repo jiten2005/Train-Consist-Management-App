@@ -1,5 +1,5 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class TrainConsistManagementAppTest {
 
@@ -13,8 +13,8 @@ public class TrainConsistManagementAppTest {
             this.capacity = capacity;
         }
 
-        public String getType() {
-            return type;
+        public int getCapacity() {
+            return capacity;
         }
 
         @Override
@@ -34,21 +34,16 @@ public class TrainConsistManagementAppTest {
         bogies.add(new Bogie("Sleeper", 80));
         bogies.add(new Bogie("AC Chair", 65));
 
-        // Grouping using Stream API (UC9)
-        Map<String, List<Bogie>> groupedBogies = bogies.stream()
-                .collect(Collectors.groupingBy(b -> b.getType()));
+        // UC10: Calculate total seating capacity using map + reduce
+        int totalSeats = bogies.stream()
+                .map(b -> b.getCapacity())      // extract capacity
+                .reduce(0, Integer::sum);       // sum all values
 
-        // Display grouped bogies
-        System.out.println("Grouped Bogies by Type:");
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            System.out.println("\nType: " + entry.getKey());
-            for (Bogie b : entry.getValue()) {
-                System.out.println(b);
-            }
-        }
+        // Display total seats
+        System.out.println("Total Seating Capacity of Train: " + totalSeats);
 
-        // Original list (unchanged)
-        System.out.println("\nOriginal Bogie List:");
+        // Display original list (unchanged)
+        System.out.println("\nBogie List:");
         for (Bogie b : bogies) {
             System.out.println(b);
         }
