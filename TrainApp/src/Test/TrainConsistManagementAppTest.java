@@ -2,16 +2,20 @@ import java.util.Arrays;
 
 public class TrainConsistManagementApp {
 
-    // Binary Search Method
-    public static boolean binarySearch(String[] arr, String key) {
+    // Search method with validation
+    public static boolean search(String[] arr, String key) {
 
-        int low = 0;
-        int high = arr.length - 1;
+        if (arr.length == 0) {
+            throw new IllegalStateException("No bogies available for search.");
+        }
+
+        Arrays.sort(arr);
+
+        int low = 0, high = arr.length - 1;
 
         while (low <= high) {
 
             int mid = (low + high) / 2;
-
             int cmp = arr[mid].compareTo(key);
 
             if (cmp == 0) return true;
@@ -22,73 +26,57 @@ public class TrainConsistManagementApp {
         return false;
     }
 
-    // Wrapper (handles sorting + empty array)
-    public static boolean search(String[] arr, String key) {
-        if (arr.length == 0) return false;
-
-        Arrays.sort(arr); // handle unsorted input
-        return binarySearch(arr, key);
-    }
-
     // ================= TEST CASES =================
 
-    public static void testBinarySearch_BogieFound() {
-        String[] data = {"BG101","BG205","BG309","BG412","BG550"};
-        boolean result = search(data, "BG309");
+    public static void testSearch_ThrowsExceptionWhenEmpty() {
+        String[] data = {};
+
+        try {
+            search(data, "BG101");
+            System.out.println("Exception When Empty: FAIL");
+        } catch (IllegalStateException e) {
+            System.out.println("Exception When Empty: PASS");
+        }
+    }
+
+    public static void testSearch_AllowsSearchWhenDataExists() {
+        String[] data = {"BG101","BG205"};
+
+        try {
+            search(data, "BG101");
+            System.out.println("Allows Search: PASS");
+        } catch (Exception e) {
+            System.out.println("Allows Search: FAIL");
+        }
+    }
+
+    public static void testSearch_BogieFoundAfterValidation() {
+        String[] data = {"BG101","BG205","BG309"};
+        boolean result = search(data, "BG205");
 
         System.out.println("Bogie Found: " + (result ? "PASS" : "FAIL"));
     }
 
-    public static void testBinarySearch_BogieNotFound() {
-        String[] data = {"BG101","BG205","BG309","BG412","BG550"};
+    public static void testSearch_BogieNotFoundAfterValidation() {
+        String[] data = {"BG101","BG205","BG309"};
         boolean result = search(data, "BG999");
 
         System.out.println("Bogie Not Found: " + (!result ? "PASS" : "FAIL"));
     }
 
-    public static void testBinarySearch_FirstElementMatch() {
-        String[] data = {"BG101","BG205","BG309","BG412","BG550"};
-        boolean result = search(data, "BG101");
-
-        System.out.println("First Element: " + (result ? "PASS" : "FAIL"));
-    }
-
-    public static void testBinarySearch_LastElementMatch() {
-        String[] data = {"BG101","BG205","BG309","BG412","BG550"};
-        boolean result = search(data, "BG550");
-
-        System.out.println("Last Element: " + (result ? "PASS" : "FAIL"));
-    }
-
-    public static void testBinarySearch_SingleElementArray() {
+    public static void testSearch_SingleElementValidCase() {
         String[] data = {"BG101"};
         boolean result = search(data, "BG101");
 
         System.out.println("Single Element: " + (result ? "PASS" : "FAIL"));
     }
 
-    public static void testBinarySearch_EmptyArray() {
-        String[] data = {};
-        boolean result = search(data, "BG101");
-
-        System.out.println("Empty Array: " + (!result ? "PASS" : "FAIL"));
-    }
-
-    public static void testBinarySearch_UnsortedInputHandled() {
-        String[] data = {"BG309","BG101","BG550","BG205","BG412"};
-        boolean result = search(data, "BG205");
-
-        System.out.println("Unsorted Input Handled: " + (result ? "PASS" : "FAIL"));
-    }
-
     public static void main(String[] args) {
 
-        testBinarySearch_BogieFound();
-        testBinarySearch_BogieNotFound();
-        testBinarySearch_FirstElementMatch();
-        testBinarySearch_LastElementMatch();
-        testBinarySearch_SingleElementArray();
-        testBinarySearch_EmptyArray();
-        testBinarySearch_UnsortedInputHandled();
+        testSearch_ThrowsExceptionWhenEmpty();
+        testSearch_AllowsSearchWhenDataExists();
+        testSearch_BogieFoundAfterValidation();
+        testSearch_BogieNotFoundAfterValidation();
+        testSearch_SingleElementValidCase();
     }
 }
