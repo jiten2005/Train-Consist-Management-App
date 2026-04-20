@@ -1,53 +1,55 @@
+import java.util.Scanner;
+
 public class TrainConsistManagementApp {
 
-    // Custom Runtime Exception
-    static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
+    // Bubble Sort Method
+    public static void bubbleSort(int[] capacities) {
+        int n = capacities.length;
 
-    // Goods Bogie class
-    static class GoodsBogie {
-        String shape;   // Rectangular / Cylindrical
-        String cargo;   // Petroleum / Coal / etc.
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
 
-        public GoodsBogie(String shape) {
-            this.shape = shape;
-        }
+                // Compare adjacent elements
+                if (capacities[j] > capacities[j + 1]) {
 
-        // Cargo assignment with try-catch-finally
-        public void assignCargo(String cargoType) {
-            try {
-                // Unsafe condition
-                if (shape.equalsIgnoreCase("Rectangular") &&
-                        cargoType.equalsIgnoreCase("Petroleum")) {
-                    throw new CargoSafetyException("Unsafe: Petroleum cannot be assigned to Rectangular bogie");
+                    // Swap
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
                 }
-
-                // Safe assignment
-                this.cargo = cargoType;
-                System.out.println("Cargo assigned: " + cargoType);
-
-            } catch (CargoSafetyException e) {
-                System.out.println("Error: " + e.getMessage());
-            } finally {
-                System.out.println("Assignment attempt completed.");
             }
         }
     }
 
+    // Display Method
+    public static void display(int[] arr) {
+        for (int val : arr) {
+            System.out.print(val + " ");
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-        GoodsBogie b1 = new GoodsBogie("Cylindrical");
-        b1.assignCargo("Petroleum");   // ✅ Safe
+        System.out.print("Enter number of passenger bogies: ");
+        int n = sc.nextInt();
 
-        GoodsBogie b2 = new GoodsBogie("Rectangular");
-        b2.assignCargo("Petroleum");   // ❌ Unsafe
+        int[] capacities = new int[n];
 
-        GoodsBogie b3 = new GoodsBogie("Rectangular");
-        b3.assignCargo("Coal");        // ✅ Safe
+        System.out.println("Enter capacities:");
+        for (int i = 0; i < n; i++) {
+            capacities[i] = sc.nextInt();
+        }
 
-        System.out.println("Program continues safely...");
+        System.out.print("Before Sorting: ");
+        display(capacities);
+
+        bubbleSort(capacities);
+
+        System.out.print("After Sorting: ");
+        display(capacities);
+
+        sc.close();
     }
 }
